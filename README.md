@@ -1,68 +1,107 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Styled Components
+=========================
+이 프로젝트는 [Nomad Coders](https://academy.nomadcoders.co/)의 니콜라스님 강의를 토대로 진행했습니다.
 
-## Available Scripts
+## `시작하기`
+### create-react-app
+`npm install -g create-react-app`
+- create-react-app를 설치한다.<br>
 
-In the project directory, you can run:
+`create-react-app [Project Name]`
+- create-react-app으로 프로젝트를 생성한다.
 
-### `npm start`
+`cd [Project Name]`<br>
+`npm start`
+- 프로젝트 폴더 경로로 이동하여 실행한다.
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## `1일차`
+### Setup and a trip to the past
+- 버튼을 두개 만들어 보자.
+```javascript
+class App extends Component {
+    render() {
+        return (
+        <Fragment>
+            <button className='button button--success'>Hello</button>
+            <button className='button button--danger'>Hello</button>
+        </Fragment>
+        );
+    }
+}
+```
+- 위와 같이 2개의 클래스를 사용하는 것은 나쁜 것은 아니지만 최선도 아니다.
 
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
+### Hello World with Styled Components
+`npm install styled-components`
+- styled-components를 설치한다.
+- styled-components는 css가 내부에 있는 컴포넌트를 준다.
+```javascript
+import styled from 'styled-components';
 
-### `npm test`
+class App extends Component {
+    render() {
+        return (
+        <Container>
+            <Button>Hello</Button>
+            <Button danger>Hello</Button>
+        </Container>
+        );
+    }
+}
 
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+const Container = styled.div`
+    height: 100vh;
+    width: 100%;
+    background-color: pink;
+`
 
-### `npm run build`
+const Button = styled.button`
+    border-radius: 50px;
+    padding: 5px;
+    min-width: 120px;
+    color: white;
+    font-weight: 600;
+    -webkit-appearance: none;
+    cursor: pointer;
+    &:active,
+    &:focus {
+        outline: none;
+    }
+    background-color: ${props => props.danger ? "#e67e22" : "#2ecc71"};
+```
+- styled-components를 사용하기 이전에는 2개의 컴포넌트와 하나 이상의 파일과 2개의 클래스명이 필요했다.
+- 하지만 styled-components를 통해 위와 같이 깔끔한 코드 작성이 가능하다.
 
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### createGlobalStyle and Extend
+```javascript
+import styled, { createGlobalStyle } from 'styled-components';
 
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
+const GlobalStyle = createGlobalStyle`
+    body{
+        padding: 0;
+        margin: 0;
+    }
+    `
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+    class App extends Component {
+    render() {
+        return (
+        <Container>
+            <GlobalStyle />
+            <Button>Hello</Button>
+            <Button danger>Hello</Button>
+        </Container>
+        );
+    }
+}
+```
+- createGlobalStyle은 전역 스타일을 처리하는 특별한 styled-component를 생성하는 함수이다.
+- css 재설정 또는 기본 스타일 같은 항목을 적용할 수 있다.
+```javascript
+const Anchor = styled(Button.withComponent('a'))`
+text-decoration: none;
+`;
+```
+- 또한 위와 같이 styled 함수 내에 .withComponent를 이용하여 기존에 만들었던 버튼에 추가로 원하는 스타일을 추가할 수 있다.
 
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+### Animations
